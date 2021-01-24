@@ -47,10 +47,10 @@ def predict_person(request):
             # Converting the images to numpy arrays and converting the audio files to spectogram and then into numpy arrays.
             preds= preprocessing_inputs(tmp_file_image1 , tmp_file_image2 , tmp_file_audio1 , tmp_file_audio2)
             
-            os.remove(tmp_file_image1)
-            os.remove(tmp_file_image2)
-            os.remove(tmp_file_audio1)
-            os.remove(tmp_file_audio2)
+            # os.remove(tmp_file_image1)
+            # os.remove(tmp_file_image2)
+            # os.remove(tmp_file_audio1)
+            # os.remove(tmp_file_audio2)
 
             if preds[0] < 0.6:
                 predictions = {
