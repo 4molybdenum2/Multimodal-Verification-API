@@ -1,4 +1,5 @@
 import os
+import io
 import numpy as np
 import cv2
 import wave
@@ -8,7 +9,6 @@ from scipy import signal
 from scipy.io import wavfile
 from tensorflow.keras.models import load_model
 from django.conf import settings
-from PIL import Image
 from django.core.files.storage import default_storage
 
 from django.core.files.base import ContentFile
@@ -38,19 +38,12 @@ def audio_to_spectrogram(file_name , save_path):
     ##############################
     
     sound_info, frame_rate = get_wav_info(file_name)
-    _ , _ ,_ , X = plt.specgram(sound_info, Fs=frame_rate)
-    # print(X)
-    # im = Image.fromarray(X[0])
-    opencvImage = cv2.cvtColor(np.array(X), cv2.COLOR_RGB2BGR)
+    fig = plt.figure()
+    plt.specgram(sound_info, Fs=frame_rate)
+    buf = io.BytesIO()
+    default_storage.save(os.path.join(settings.MEDIA_ROOT, save_path) , ContentFile())
+    img = image_processing(os.path.join(settings.MEDIA_ROOT, save_path) , 0)
 
-
-    ##############################
-    # array_bgr = cv2.imread(os.path.join(settings.MEDIA_ROOT,save_path))
-    # array = cv2.cvtColor(array_bgr , cv2.COLOR_BGR2RGB)
-    img= cv2.resize(opencvImage , (IMAGE_HEIGHT,IMAGE_WIDTH))
-    img= np.array(img).reshape(-1,IMAGE_HEIGHT,IMAGE_WIDTH,3)
-    
-    print(img)
     return img
 
 def preprocessing_inputs(file_image1 , file_image2 , file_audio1 , file_audio2):
